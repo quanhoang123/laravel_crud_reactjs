@@ -1949,15 +1949,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
-var Index = /*#__PURE__*/function (_Component) {
-  _inherits(Index, _Component);
+var PostProduct = /*#__PURE__*/function (_Component) {
+  _inherits(PostProduct, _Component);
 
-  var _super = _createSuper(Index);
+  var _super = _createSuper(PostProduct);
 
-  function Index(props) {
+  function PostProduct(props) {
     var _this;
 
-    _classCallCheck(this, Index);
+    _classCallCheck(this, PostProduct);
 
     _this = _super.call(this, props);
 
@@ -2029,7 +2029,9 @@ var Index = /*#__PURE__*/function (_Component) {
       };
       console.log(FormData);
       axios__WEBPACK_IMPORTED_MODULE_1___default().post('http://localhost:8000/api/product/', FormData).then(function (res) {
-        return console.log(res.data);
+        _this.getData();
+
+        console.log(res.data);
       })["catch"](function (err) {
         return console.log(err);
       });
@@ -2075,10 +2077,50 @@ var Index = /*#__PURE__*/function (_Component) {
       });
     });
 
+    _defineProperty(_assertThisInitialized(_this), "update", function (id) {
+      var Form = {
+        name: _this.state.name,
+        id_type: _this.state.id_type,
+        image: _this.state.image,
+        description: _this.state.description,
+        unit: _this.state.unit,
+        promotion_price: _this.state.promotion_price,
+        "new": _this.state["new"],
+        unit_price: _this.state.unit_price
+      }; // const formData = this.createForm();      
+
+      console.log(Form);
+      axios__WEBPACK_IMPORTED_MODULE_1___default().put("http://localhost:8000/api/product/".concat(id), Form).then(function (res) {// this.getData();
+      })["catch"](function (err) {
+        return console.log(err);
+      });
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "updateData", function (id) {
+      _this.clear();
+
+      var _product = _this.state._product;
+
+      _product.filter(function (drink) {
+        if (drink.id === id) {
+          _this.setState({
+            name: drink.name,
+            id_type: drink.id_type,
+            image: drink.image,
+            description: drink.description,
+            unit: drink.unit,
+            promotion_price: drink.promotion_price,
+            "new": drink["new"],
+            unit_price: drink.unit_price
+          });
+        }
+      });
+    });
+
     _defineProperty(_assertThisInitialized(_this), "delete", function (id) {
       if (window.confirm('Bạn Co Thuc Su Muon Xoa')) {
-        axios__WEBPACK_IMPORTED_MODULE_1___default().delete("http://localhost:8000/api/product/".concat(id), null).then(function (res) {
-          return console.log(res.data);
+        axios__WEBPACK_IMPORTED_MODULE_1___default().delete("http://localhost:8000/api/product/".concat(id)).then(function (res) {
+          _this.getData();
         })["catch"](function (err) {
           return console.log(err);
         });
@@ -2107,64 +2149,15 @@ var Index = /*#__PURE__*/function (_Component) {
     return _this;
   }
 
-  _createClass(Index, [{
+  _createClass(PostProduct, [{
     key: "componentDidMount",
     value: function componentDidMount() {
       this.getData();
     }
   }, {
-    key: "update",
-    value: function update(id) {
-      var Form = {
-        name: this.state.name,
-        id_type: this.state.id_type,
-        image: this.state.image,
-        description: this.state.description,
-        unit: this.state.unit,
-        promotion_price: this.state.promotion_price,
-        "new": this.state["new"],
-        unit_price: this.state.unit_price
-      }; // callAPI(`product/${id}`, "PUT", Form).then((response) => {
-      //     alert("Update drink successly !");
-      //     this.clear()
-      //     this.getData()
-      //     window.location.reload()
-      // });
-
-      axios__WEBPACK_IMPORTED_MODULE_1___default().patch("http://localhost:8000/api/product/".concat(id), Form).then(function (res) {
-        return console.log(res.data);
-      })["catch"](function (err) {
-        return console.log(err);
-      });
-    }
-  }, {
-    key: "updateData",
-    value: function updateData(id) {
-      var _this2 = this;
-
-      this.clear();
-      var _product = this.state._product;
-
-      _product.filter(function (drink) {
-        if (drink.id === id) {
-          _this2.setState({
-            name: drink.name,
-            id_type: drink.id_type,
-            image: drink.image,
-            description: drink.description,
-            unit: drink.unit,
-            promotion_price: drink.promotion_price,
-            "new": drink["new"],
-            unit_price: drink.unit_price
-          });
-        }
-      });
-    } // Function Delete
-
-  }, {
     key: "render",
     value: function render() {
-      var _this3 = this;
+      var _this2 = this;
 
       // console.log(this.state.img.toString());
       var _product = this.state._product;
@@ -2172,7 +2165,6 @@ var Index = /*#__PURE__*/function (_Component) {
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
           className: "modal fade",
           id: "addProduct",
-          tabindex: "-1",
           role: "dialog",
           "aria-labelledby": "mediumModalLabel",
           "aria-hidden": "true",
@@ -2211,7 +2203,7 @@ var Index = /*#__PURE__*/function (_Component) {
                       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("form", {
                         enctype: "multipart/form-data",
                         onSubmit: function onSubmit(event) {
-                          return _this3.postProduct(event);
+                          return _this2.postProduct(event);
                         },
                         className: "form-horizontal",
                         method: "post",
@@ -2246,9 +2238,9 @@ var Index = /*#__PURE__*/function (_Component) {
                               htmlFor: "id_type",
                               children: "Name Type "
                             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-                              "class": "form-outline form-white",
+                              className: "form-outline form-white",
                               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("select", {
-                                "class": "form-control",
+                                className: "form-control",
                                 onChange: this.onChange,
                                 children: this.state._product.length > 0 && this.state._product.map(function (e) {
                                   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
@@ -2389,7 +2381,6 @@ var Index = /*#__PURE__*/function (_Component) {
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
           className: "modal fade",
           id: "editProduct",
-          tabindex: "-1",
           role: "dialog",
           "aria-labelledby": "mediumModalLabel",
           "aria-hidden": "true",
@@ -2428,7 +2419,7 @@ var Index = /*#__PURE__*/function (_Component) {
                       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("form", {
                         enctype: "multipart/form-data",
                         onSubmit: function onSubmit() {
-                          return _this3.update(_this3.state.id);
+                          return _this2.update(_this2.state.id);
                         },
                         className: "form-horizontal",
                         role: "form",
@@ -2462,9 +2453,9 @@ var Index = /*#__PURE__*/function (_Component) {
                               htmlFor: "id_type",
                               children: "Name Type "
                             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-                              "class": "form-outline form-white",
+                              className: "form-outline form-white",
                               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("select", {
-                                "class": "form-control",
+                                className: "form-control",
                                 onChange: this.onChange,
                                 children: this.state._product.length > 0 && this.state._product.map(function (e) {
                                   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
@@ -2571,7 +2562,7 @@ var Index = /*#__PURE__*/function (_Component) {
                               type: "file",
                               name: "image",
                               onChange: function onChange() {
-                                return _this3.readURL;
+                                return _this2.readURL;
                               }
                             })]
                           })]
@@ -2582,7 +2573,7 @@ var Index = /*#__PURE__*/function (_Component) {
                             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
                               type: "submit",
                               className: "btn btn-primary",
-                              children: "Add Product"
+                              children: "Edit Product"
                             })
                           })
                         }), " "]
@@ -2599,13 +2590,13 @@ var Index = /*#__PURE__*/function (_Component) {
             children: "Show Form"
           }), " "]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("a", {
-          "class": "btn btn-success text-light",
+          className: "btn btn-success text-light",
           "data-toggle": "modal",
           id: "addProduct",
           "data-target": "#addProduct",
           title: "Create a project",
           children: [" ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("i", {
-            "class": "fas fa-plus-circle"
+            className: "fas fa-plus-circle"
           })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("table", {
           className: "table table-striped table-dark",
@@ -2712,7 +2703,7 @@ var Index = /*#__PURE__*/function (_Component) {
                       id: "editProduct",
                       "data-target": "#editProduct",
                       onClick: function onClick() {
-                        return _this3.updateData(a.id);
+                        return _this2.updateData(a.id);
                       },
                       children: "Editer"
                     })
@@ -2720,7 +2711,7 @@ var Index = /*#__PURE__*/function (_Component) {
                     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
                       className: "btn btn-danger",
                       onClick: function onClick() {
-                        return _this3["delete"](a.id);
+                        return _this2["delete"](a.id);
                       },
                       children: "Delete"
                     })
@@ -2734,10 +2725,10 @@ var Index = /*#__PURE__*/function (_Component) {
     }
   }]);
 
-  return Index;
+  return PostProduct;
 }(react__WEBPACK_IMPORTED_MODULE_0__.Component);
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Index);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (PostProduct);
 
 /***/ }),
 

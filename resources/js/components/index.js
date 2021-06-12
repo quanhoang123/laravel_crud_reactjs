@@ -4,7 +4,7 @@ import axios from 'axios';
 // import callAPI from './callAPI/config';
 // import Swal from 'sweetalert2';
 
-class Index extends Component {
+class PostProduct extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -23,9 +23,9 @@ class Index extends Component {
 
         this.onChange = this.onChange.bind(this);
         this.postProduct = this.postProduct.bind(this);
-        this.update=this.update.bind(this);
-        this.updateData=this.updateData.bind(this);
-        this.delete=this.delete.bind(this);
+        this.update = this.update.bind(this);
+        this.updateData = this.updateData.bind(this);
+        this.delete = this.delete.bind(this);
     }
 
     onChange = (event) => {
@@ -73,8 +73,10 @@ class Index extends Component {
         console.log(FormData);
 
         axios.post('http://localhost:8000/api/product/', FormData)
-            .then(res => console.log(res.data))
-            .catch((err) => console.log(err));
+            .then((res) => {
+                this.getData();
+                console.log(res.data)
+            }).catch((err) => console.log(err));
 
         this.clear();
         this.getData();
@@ -103,52 +105,6 @@ class Index extends Component {
             })
     }
 
-    // update = (id) => {
-
-    //     console.log("hihih");
-    //     console.log(this.state.id);
-    //     var dataFrom = this.createFrom();
-    //     callAPI(`product/${id}`, "PUT", dataFrom).then((response) => {
-    //         alert("Update drink successly !");
-    //         this.clear()
-    //         this.getData()
-    //         window.location.reload()
-    //     });
-
-    // }
-
-    // updateData = (id) => {
-    //     this.clear();
-    //     var product = this.state._product;
-    //     product.filter(drink => {
-    //         if (drink.id === id) {
-    //             this.setState({
-    //                 name: drink.name,
-    //                 image: drink.image,
-    //                 id_type: drink.id_type,
-    //                 description: drink.description,
-    //                 unit: drink.unit,
-    //                 promotion_price: drink.promotion_price,
-    //                 new: drink.new,
-    //                 unit_price: drink.unit_price
-    //             })
-    //         }
-    //     })
-    // }
-
-    // delete = (id) => {
-    //     if (window.confirm('Bạn Co Thuc Su Muon Xoa')) {
-    //         callAPI(`product/${id}`, "DELETE", null).then((response) => {
-    //             this.clear();
-    //             this.getData();
-    //             alert("Xoá thành công!");
-    //         });
-    //     } else {
-    //         return;
-    //     }
-    // }
-
-
     readURL = (event) => {
         setTimeout(() => {
             var reader = new FileReader();
@@ -166,42 +122,39 @@ class Index extends Component {
         });
     }
 
-    update (id) { 
+    update=(id)=> {
         const Form = {
-                name: this.state.name,
-                id_type: this.state.id_type,
-                image: this.state.image,
-                description: this.state.description,
-                unit:this.state.unit,
-                promotion_price:this.state.promotion_price,
-                new:this.state.new,
-                unit_price:this.state.unit_price
+            name: this.state.name,
+            id_type: this.state.id_type,
+            image: this.state.image,
+            description: this.state.description,
+            unit: this.state.unit,
+            promotion_price: this.state.promotion_price,
+            new: this.state.new,
+            unit_price: this.state.unit_price
         }
-        // callAPI(`product/${id}`, "PUT", Form).then((response) => {
-        //     alert("Update drink successly !");
-        //     this.clear()
-        //     this.getData()
-        //     window.location.reload()
-        // });
-        axios.patch(`http://localhost:8000/api/product/${id}`, Form)
-            .then(res => console.log(res.data))
-            .catch((err) => console.log(err));
+        // const formData = this.createForm();      
+        console.log(Form);   
+        axios.put(`http://localhost:8000/api/product/${id}`, Form)
+            .then((res) => {
+                // this.getData();
+            }).catch((err) => console.log(err));
     }
 
-    updateData (id) {
+    updateData=(id)=> {
         this.clear();
         var _product = this.state._product;
         _product.filter(drink => {
             if (drink.id === id) {
                 this.setState({
-                    name:drink.name,
-                    id_type:drink.id_type,
-                    image:drink.image,
-                    description:drink.description,
-                    unit:drink.unit,
-                    promotion_price:drink.promotion_price,
-                    new:drink.new,
-                    unit_price:drink.unit_price
+                    name: drink.name,
+                    id_type: drink.id_type,
+                    image: drink.image,
+                    description: drink.description,
+                    unit: drink.unit,
+                    promotion_price: drink.promotion_price,
+                    new: drink.new,
+                    unit_price: drink.unit_price
 
                 })
             }
@@ -212,9 +165,11 @@ class Index extends Component {
     // Function Delete
     delete = (id) => {
         if (window.confirm('Bạn Co Thuc Su Muon Xoa')) {
-            axios.delete(`http://localhost:8000/api/product/${id}`, null)
-            .then(res => console.log(res.data))
-            .catch((err) => console.log(err));
+            axios.delete(`http://localhost:8000/api/product/${id}`)
+                .then((res) => {
+                    this.getData();
+                })
+                .catch((err) => console.log(err));
         } else {
             return;
         }
@@ -226,7 +181,7 @@ class Index extends Component {
         return (
             <div >
 
-                <div className="modal fade" id="addProduct" tabindex="-1" role="dialog" aria-labelledby="mediumModalLabel"
+                <div className="modal fade" id="addProduct" role="dialog" aria-labelledby="mediumModalLabel"
                     aria-hidden="true">
                     <div className="modal-dialog" role="document">
                         <div className="modal-content">
@@ -244,7 +199,7 @@ class Index extends Component {
                                     <section className="panel panel-default">
 
                                         <div className="panel-body">
-                                            <form enctype="multipart/form-data" onSubmit={(event) => this.postProduct(event)} className="form-horizontal" method="post" role="form">
+                                            <form  enctype="multipart/form-data"  onSubmit={(event) => this.postProduct(event)} className="form-horizontal" method="post" role="form">
 
                                                 <div className="form-group">
                                                     <label htmlFor="name" className="col-sm-3 control-label">Name</label>
@@ -256,8 +211,8 @@ class Index extends Component {
                                                     <label className="col-sm-3 control-label">Chon</label>
                                                     <div className="col-sm-5">
                                                         <label className="control-label small" htmlFor="id_type">Name Type </label>
-                                                        <div class="form-outline form-white">
-                                                            <select class="form-control" onChange={this.onChange} >
+                                                        <div className="form-outline form-white">
+                                                            <select className="form-control" onChange={this.onChange} >
                                                                 {this.state._product.length > 0 &&
                                                                     this.state._product.map(e => {
                                                                         return <option name="id_type" value={e.id}>{e.name}</option>
@@ -321,7 +276,7 @@ class Index extends Component {
                     </div>
                 </div>
 
-                <div className="modal fade" id="editProduct" tabindex="-1" role="dialog" aria-labelledby="mediumModalLabel"
+                <div className="modal fade" id="editProduct"  role="dialog" aria-labelledby="mediumModalLabel"
                     aria-hidden="true">
                     <div className="modal-dialog" role="document">
                         <div className="modal-content">
@@ -339,8 +294,8 @@ class Index extends Component {
                                     <section className="panel panel-default">
 
                                         <div className="panel-body">
-                                            <form enctype="multipart/form-data" onSubmit={() => this.update(this.state.id)} className="form-horizontal" role="form">
-                                                         
+                                            <form  enctype="multipart/form-data" onSubmit={() => this.update(this.state.id)} className="form-horizontal" role="form">
+
                                                 <div className="form-group">
                                                     <label htmlFor="name" className="col-sm-3 control-label">Name</label>
                                                     <div className="col-sm-9">
@@ -351,8 +306,8 @@ class Index extends Component {
                                                     <label className="col-sm-3 control-label">Chon</label>
                                                     <div className="col-sm-5">
                                                         <label className="control-label small" htmlFor="id_type">Name Type </label>
-                                                        <div class="form-outline form-white">
-                                                            <select class="form-control" onChange={this.onChange} >
+                                                        <div className="form-outline form-white">
+                                                            <select className="form-control" onChange={this.onChange} >
                                                                 {this.state._product.length > 0 &&
                                                                     this.state._product.map(e => {
                                                                         return <option name="id_type" value={e.id}>{e.name}</option>
@@ -401,7 +356,7 @@ class Index extends Component {
                                                 <hr />
                                                 <div className="form-group">
                                                     <div className="col-sm-offset-3 col-sm-9">
-                                                        <button type="submit" className="btn btn-primary">Add Product</button>
+                                                        <button type="submit" className="btn btn-primary">Edit Product</button>
                                                     </div>
                                                 </div> {/* form-group // */}
                                             </form>
@@ -415,8 +370,8 @@ class Index extends Component {
                 </div>
 
                 <center className="text-center"> <h1>Show Form</h1> </center>
-                <a class="btn btn-success text-light" data-toggle="modal" id="addProduct" data-target="#addProduct"
-                    title="Create a project"> <i class="fas fa-plus-circle"></i>
+                <a className="btn btn-success text-light" data-toggle="modal" id="addProduct" data-target="#addProduct"
+                    title="Create a project"> <i className="fas fa-plus-circle"></i>
                 </a>
                 {/* <span scope="col"><a href="admin_add" className="btn btn-primary">add</a></span>                 */}
                 <table className="table table-striped table-dark" id="dataTable">
@@ -468,7 +423,7 @@ class Index extends Component {
                                             <a className="btn btn-warning" data-toggle="modal" id="editProduct" data-target="#editProduct" onClick={() => this.updateData(a.id)}>Editer</a>
                                         </form>
                                         <form >
-                                            <button className="btn btn-danger"  onClick={()=>this.delete(a.id)}>Delete</button>
+                                            <button className="btn btn-danger" onClick={() => this.delete(a.id)}>Delete</button>
                                         </form>
                                     </td>
                                 </tr>
@@ -481,4 +436,4 @@ class Index extends Component {
     }
 }
 
-export default Index;
+export default PostProduct;

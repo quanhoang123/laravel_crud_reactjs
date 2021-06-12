@@ -25,6 +25,7 @@ class ProductsController extends Controller
         ->orderByDesc('id')
         ->get();
         return response()->json($product);
+        // return response()->json(Products::get());
     }
 
     /**
@@ -99,7 +100,7 @@ class ProductsController extends Controller
      * @param  \App\Models\Products  $products
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,Products $product)
+    public function update(Request $request,$id)
     {
 
         // $product = $request->input('name');     
@@ -109,7 +110,7 @@ class ProductsController extends Controller
         // $product = $request->input('promotion_price');
         // $product = $request->input('unit');
         // $product = $request->input('new');
-
+        $product =  Products::find($id);
         if ($request->hasFile('image')) {
             $file_name=$request->file('image')->getClientOriginalName();
             $product->image = $file_name;
@@ -140,11 +141,8 @@ class ProductsController extends Controller
      * @param  \App\Models\Products  $products
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Products $product)
+    public function destroy( $id)
     {
-        $product->delete();
-        return response()->json([
-            'message' => 'expense deleted'
-        ]);
+        return response()->json(Products::destroy($id));
     }
 }

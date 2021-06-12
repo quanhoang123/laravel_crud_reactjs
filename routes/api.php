@@ -23,9 +23,17 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 // Route::get('/product/{id}', 'ProductsController@show')->name('product.show');
 
-// Route::post('/product/{id}', 'ProductsController@update')->name('product.update');
+// Route::put('/product/{id}', 'ProductsController@update')->name('product.update');
 
 // Route::delete('/product/{id}', 'ProductsController@destory')->name('product.destroy');
 
 
-Route::resource('/product', 'ProductsController');
+// Route::resource('/product', 'ProductsController');
+
+Route::middleware('cors')->group(function(){
+    Route::resource('/product', 'ProductsController');
+    // Route::get('/product','ProductsController@index')->name('product.all');
+    // Route::delete('/product{id}','ProductsController@destory')->name('product.destroy');
+    // Route::put('/product{id}','ProductsController@update')->name('product.update');
+    // Route::post('/product','ProductsController@store')->name('product.store');
+ });
